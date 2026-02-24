@@ -14,7 +14,15 @@ export default function QueryProcessor(query: string): string {
   }
 
   if (lowerQuery.includes("name")) {
-    return "nikashb";
+    return "My Andrew ID is nikashb.";
+  }
+
+  if (lowerQuery.includes("largest")) {
+    const numbers = query.match(/-?\d+(\.\d+)?/g);
+    if (numbers) {
+      const max = Math.max(...numbers.map(Number));
+      return max.toString();
+    }
   }
 
   return "";
