@@ -10,7 +10,7 @@ export default function QueryProcessor(query: string): string {
   }
 
   if (
-    // lowerQuery.includes("andrew id") ||
+    lowerQuery.includes("andrew id") ||
     lowerQuery.includes("name")
   ) {
     return "My Andrew ID is nikashb.";
