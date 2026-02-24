@@ -17,6 +17,14 @@ export default function QueryProcessor(query: string): string {
     return "My Andrew ID is nikashb.";
   }
 
+  if (lowerQuery.includes("plus")) {
+    const numbers = query.match(/-?\d+(\.\d+)?/g);
+    if (numbers && numbers.length >= 2) {
+      const sum = numbers.map(Number).reduce((a, b) => a + b, 0);
+      return sum.toString();
+    }
+  }
+
   if (lowerQuery.includes("largest")) {
     const numbers = query.match(/-?\d+(\.\d+)?/g);
     if (numbers) {
