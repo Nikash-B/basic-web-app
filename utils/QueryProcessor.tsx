@@ -41,6 +41,19 @@ export default function QueryProcessor(query: string): string {
     }
   }
 
+  if (lowerQuery.includes("power")) {
+    const numbers = query.match(/\d+/g);
+    if (numbers && numbers.length >= 2) {
+      const base = BigInt(numbers[0]);
+      const exp = Number(numbers[1]);
+      let result = BigInt(1);
+      for (let i = 0; i < exp; i++) {
+        result = result * base;
+      }
+      return result.toString();
+    }
+  }
+
   if (lowerQuery.includes("square") && lowerQuery.includes("cube")) {
     const numbers = query.match(/-?\d+(\.\d+)?/g);
     if (numbers) {
