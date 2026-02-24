@@ -25,6 +25,14 @@ export default function QueryProcessor(query: string): string {
     }
   }
 
+  if (lowerQuery.includes("minus")) {
+    const numbers = query.match(/-?\d+(\.\d+)?/g);
+    if (numbers && numbers.length >= 2) {
+      const result = numbers.map(Number).reduce((a, b) => a - b);
+      return result.toString();
+    }
+  }
+
   if (lowerQuery.includes("multiplied")) {
     const numbers = query.match(/-?\d+(\.\d+)?/g);
     if (numbers && numbers.length >= 2) {
