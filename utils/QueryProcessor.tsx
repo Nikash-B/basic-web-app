@@ -44,6 +44,21 @@ export default function QueryProcessor(query: string): string {
     }
   }
 
+  if (lowerQuery.includes("primes")) {
+    const numbers = query.match(/-?\d+(\.\d+)?/g);
+    if (numbers) {
+      const isPrime = (n: number): boolean => {
+        if (n < 2) return false;
+        for (let i = 2; i * i <= n; i++) {
+          if (n % i === 0) return false;
+        }
+        return true;
+      };
+      const results = numbers.map(Number).filter(isPrime);
+      return results.join(", ");
+    }
+  }
+
   if (lowerQuery.includes("largest")) {
     const numbers = query.match(/-?\d+(\.\d+)?/g);
     if (numbers) {
