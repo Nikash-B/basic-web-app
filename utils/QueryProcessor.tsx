@@ -17,27 +17,41 @@ export default function QueryProcessor(query: string): string {
     return "My Andrew ID is nikashb.";
   }
 
-  if (lowerQuery.includes("plus")) {
-    const numbers = query.match(/-?\d+(\.\d+)?/g);
-    if (numbers && numbers.length >= 2) {
-      const sum = numbers.map(Number).reduce((a, b) => a + b, 0);
-      return sum.toString();
-    }
-  }
-
-  if (lowerQuery.includes("minus")) {
-    const numbers = query.match(/-?\d+(\.\d+)?/g);
-    if (numbers && numbers.length >= 2) {
-      const result = numbers.map(Number).reduce((a, b) => a - b);
-      return result.toString();
-    }
-  }
-
-  if (lowerQuery.includes("multiplied")) {
-    const numbers = query.match(/-?\d+(\.\d+)?/g);
-    if (numbers && numbers.length >= 2) {
-      const product = numbers.map(Number).reduce((a, b) => a * b, 1);
-      return product.toString();
+  if (lowerQuery.includes("plus") || lowerQuery.includes("minus") || lowerQuery.includes("multiplied")) {
+    const tokens = lowerQuery.match(/(\d+(\.\d+)?|plus|minus|multiplied)/g);
+    if (tokens) {
+      const nums: number[] = [];
+      const ops: string[] = [];
+      for (const token of tokens) {
+        if (token === "plus" || token === "minus" || token === "multiplied") {
+          ops.push(token);
+        } else {
+          nums.push(Number(token));
+        }
+      }
+      if (nums.length >= 2 && ops.length >= 1) {
+        // Apply multiplied first (higher precedence)
+        const reducedNums: number[] = [nums[0]];
+        const reducedOps: string[] = [];
+        for (let i = 0; i < ops.length; i++) {
+          if (ops[i] === "multiplied") {
+            reducedNums[reducedNums.length - 1] *= nums[i + 1];
+          } else {
+            reducedOps.push(ops[i]);
+            reducedNums.push(nums[i + 1]);
+          }
+        }
+        // Then apply plus/minus left to right
+        let result = reducedNums[0];
+        for (let i = 0; i < reducedOps.length; i++) {
+          if (reducedOps[i] === "plus") {
+            result += reducedNums[i + 1];
+          } else if (reducedOps[i] === "minus") {
+            result -= reducedNums[i + 1];
+          }
+        }
+        return result.toString();
+      }
     }
   }
 
